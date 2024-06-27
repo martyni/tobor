@@ -13,6 +13,6 @@ else
    unbuffer docker build -t $NAME:$VERSION . 2>&1 | tee $BUILD_OUTPUT && awk -F 'exit code: ' '/exit code/{print $2}' $BUILD_OUTPUT > $BUILD_EXIT_FILE || exit 1
 fi
 
-echo docker run $NAME:$VERSION
+echo docker run -it $NAME:$VERSION bash
 echo exiting $(cat ${BUILD_EXIT_FILE})
 exit $(cat $BUILD_EXIT_FILE)
