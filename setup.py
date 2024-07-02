@@ -74,7 +74,7 @@ setup(
     # Scripts
     entry_points={
         'console_scripts': [
-            meta_dict['name'] + ' = my_app.app:main'],
+            meta_dict['name'] + ' = tobor.app:main'],
     },
 
     # Other configurations

@@ -1,7 +1,7 @@
 '''
 tobor twitch bot
 '''
-from typing import Literal
+import random
 from twitchio.ext import commands
 
 
@@ -15,7 +15,29 @@ with open('/home/app/credentials') as creds_file:
    my_yaml = creds_file.read()
 
 creds = load(my_yaml, Loader=Loader)
-   
+
+
+def print_response(ctx):
+    print(ctx)
+    print(type(ctx))
+    return type(ctx)
+
+def divide_balls(ball_number, ball_string='askmar1Lookballs '):
+    ball_list = []
+    combined_ball_string = f'{ ball_string * ball_number}'
+    ball_limit = 500 // len(ball_string)
+    if ball_number >= ball_limit:
+        print(f'{ball_number} is more than {ball_limit}')
+        ball_list.append(f'{ball_string * ball_limit}')
+        if ball_number / ball_limit > 2:
+            print(f'{ball_number} is more than {ball_limit * 2}')
+            ball_list.append(f'{ball_string * ball_limit}')
+        remaining_balls = ball_number % ball_limit    
+        print(f'{remaining_balls} is the remaining balls')
+        ball_list.append(f'{ball_string * remaining_balls}')         
+    else:
+        ball_list.append(combined_ball_string)
+    return ball_list
 
 class Bot(commands.Bot):
 
@@ -39,8 +61,21 @@ class Bot(commands.Bot):
 
         # Send a hello back!
         # Sending a reply back to the channel is easy... Below is an example.
+        print_response(ctx)
         await ctx.send(f'Hello {ctx.author.name}!')
 
+    @commands.command()
+    async def dice(self, ctx: commands.Context):
+        # Simulate a dice roll, a random number between 1 and 6
+        await ctx.send(f'You rolled a {random.randint(1, 6)}')    
+    
+    @commands.command()
+    async def balls(self, ctx: commands.Context):
+        ball_number = random.randint(0, 69)
+        ball_list = divide_balls(ball_number)
+        for balls in ball_list:
+            await ctx.send(f'{balls}') 
 
-bot = Bot()
-bot.run()
+def main():
+    bot = Bot()
+    bot.run()
