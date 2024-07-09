@@ -4,6 +4,8 @@ tobor twitch bot
 import random
 from twitchio.ext import commands
 
+TWITCH_INTEGRATION = 'https://support.discord.com/hc/en-us/articles/212112068-Twitch-Integration-FAQ#h_01GBQS1H1GHA13S6S3NX3114QC'  
+LINKS = 'https://linktr.ee/askmartyn'
 
 from yaml import load, dump
 try:
@@ -63,10 +65,28 @@ class Bot(commands.Bot):
             await ctx.send(f'{balls}')    
             
     @commands.command()
+    async def content_warning(self, ctx: commands.Context):
+        warnings = [
+        '''FLASHING IMAGES AND BRIGHT COLOURS people with photosensitivity or who have sensory overload may need to look elsewhere. You have been warned''',
+        '''The askMartyn channel is a LGBTQ+, sex positive stream for people who don't mind rude words, innuendo, bad behavior and general naughtiness. As such you may read or hear something that you find offensive. We will not tolerate hate speech, racism, transphobia or people being dicks (you know who you are) zero tolerance.You have been warned'''
+        ]
+        for warning in warnings:
+            await ctx.send(f'{warning}')
+
+    @commands.command()
     async def roll_dice(self, ctx: commands.Context):
         # Simulate a dice roll, a random number between 1 and 6
         await ctx.send(f'You rolled a {random.randint(1, 6)}')    
 
+    @commands.command()
+    async def coinflip(self, ctx: commands.Context):
+        # Flip a coin!
+        await ctx.send(random.choice(['Heads!', 'Tails!']))
+
+    @commands.command()
+    async def discord(self, ctx: commands.Context):
+        return await ctx.send(f'{TWITCH_INTEGRATION}')
+    
     @commands.command()
     async def eelee(self, ctx: commands.Context):
         ball_number = random.randint(0, 69)
@@ -74,6 +94,10 @@ class Bot(commands.Bot):
         for balls in ball_list:
             await ctx.send(f'{balls}')    
     
+    @commands.command()
+    async def fluid(self, ctx: commands.Context):
+        fluid_choice = random.choice(['wet', 'moisten', 'fluid', 'slorp', 'wazz', 'spit', 'squirt' ])
+        await ctx.send(f'{fluid_choice} yourself')
 
     @commands.command()
     async def hello(self, ctx: commands.Context):
