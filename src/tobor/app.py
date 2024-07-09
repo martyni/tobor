@@ -45,36 +45,47 @@ class Bot(commands.Bot):
         # Initialise our Bot with our access token, prefix and a list of channels to join on boot...
         # prefix can be a callable, which returns a list of strings or a string...
         # initial_channels can also be a callable which returns a list of strings...
+        self.__exclusions = [i for i in dir(self)]
         super().__init__(token=creds['access_token'], prefix='?', initial_channels=['askmartyn'])
 
     async def event_ready(self):
         # Notify us when everything is ready!
         # We are logged in and ready to chat and use commands...
         print(f'Logged in as | {self.nick}')
-        print(f'User id is | {self.user_id}')
-
-    @commands.command()
-    async def hello(self, ctx: commands.Context):
-        # Here we have a command hello, we can invoke our command with our prefix and command name
-        # e.g ?hello
-        # We can also give our commands aliases (different names) to invoke with.
-
-        # Send a hello back!
-        # Sending a reply back to the channel is easy... Below is an example.
-        print_response(ctx)
-        await ctx.send(f'Hello {ctx.author.name}!')
-
-    @commands.command()
-    async def dice(self, ctx: commands.Context):
-        # Simulate a dice roll, a random number between 1 and 6
-        await ctx.send(f'You rolled a {random.randint(1, 6)}')    
+        print(f'User id is | {self.user_id}') 
     
+
     @commands.command()
     async def balls(self, ctx: commands.Context):
         ball_number = random.randint(0, 69)
         ball_list = divide_balls(ball_number)
         for balls in ball_list:
-            await ctx.send(f'{balls}') 
+            await ctx.send(f'{balls}')    
+            
+    @commands.command()
+    async def roll_dice(self, ctx: commands.Context):
+        # Simulate a dice roll, a random number between 1 and 6
+        await ctx.send(f'You rolled a {random.randint(1, 6)}')    
+
+    @commands.command()
+    async def eelee(self, ctx: commands.Context):
+        ball_number = random.randint(0, 69)
+        ball_list = divide_balls(ball_number, ball_string='askmar1Eelee ')
+        for balls in ball_list:
+            await ctx.send(f'{balls}')    
+    
+
+    @commands.command()
+    async def hello(self, ctx: commands.Context):
+        print_response(ctx)
+        await ctx.send(f'Hello {ctx.author.name}!')
+
+    @commands.command()
+    async def nerd(self, ctx: commands.Context):
+        your_choices = random.choice(['you','yew', 'your', 'ur', 'you\'re', 'you are', 'u are', 'thou art' ])
+        nerd_choices = random.choice(['nerd','newt', 'nord', 'nearrrrd','NERD!!', 'nooooooord', 'naaaard'])
+        await ctx.send(f'{your_choices} a {nerd_choices}')
+
 
 def main():
     bot = Bot()
