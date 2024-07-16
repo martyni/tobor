@@ -16,6 +16,6 @@ def test_divide_balls():
     '''
     Test of main function for default app
     '''
-    assert divide_balls(1) == ['askmar1Lookballs '], f'the balls are wrong'
-    assert len(divide_balls(30)) is 2, f'the balls are wrong'
-    assert len(divide_balls(60)) is 3, f'the balls are wrong'
+    assert divide_balls(1) == ['askmar1Lookballs ', '1 balls']
+    assert len(divide_balls(30)) is 3
+    assert len(divide_balls(60)) is 4

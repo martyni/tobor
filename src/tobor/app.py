@@ -3,20 +3,30 @@ tobor twitch bot
 '''
 import random
 from twitchio.ext import commands
+import os
+from yaml import load
+try:
+    from yaml import CLoader as Loader
+except ImportError:
+    from yaml import Loader
 
 TWITCH_INTEGRATION = 'https://support.discord.com/hc/en-us/articles/212112068-Twitch-Integration-FAQ#h_01GBQS1H1GHA13S6S3NX3114QC'  
 LINKS = 'https://linktr.ee/askmartyn'
 
-from yaml import load, dump
-try:
-    from yaml import CLoader as Loader, CDumper as Dumper
-except ImportError:
-    from yaml import Loader, Dumper
+if os.environ.get('TOBOR_ACCESS_TOKEN') is not None:
+    print('loading env vars')
 
-with open('/home/app/credentials') as creds_file:
-   my_yaml = creds_file.read()
+    creds = {
+            'access_token': os.environ.get('TOBOR_ACCESS_TOKEN'),
+             'refresh_token': os.environ.get('TOBOR_REFRESH_TOKEN'),
+             'client_id': os.environ.get('TOBOR_CLIENT_ID')
+             }
+else:    
+    print('loading credentials from file')
 
-creds = load(my_yaml, Loader=Loader)
+    with open('/home/app/credentials') as creds_file:
+        my_yaml = creds_file.read()
+    creds = load(my_yaml, Loader=Loader)
 
 
 def print_response(ctx):
@@ -24,7 +34,7 @@ def print_response(ctx):
     print(type(ctx))
     return type(ctx)
 
-def divide_balls(ball_number, ball_string='askmar1Lookballs '):
+def divide_balls(ball_number, ball_string='askmar1Lookballs ', objects='balls'):
     ball_list = []
     combined_ball_string = f'{ ball_string * ball_number}'
     ball_limit = 500 // len(ball_string)
@@ -39,6 +49,7 @@ def divide_balls(ball_number, ball_string='askmar1Lookballs '):
         ball_list.append(f'{ball_string * remaining_balls}')         
     else:
         ball_list.append(combined_ball_string)
+    ball_list.append(f'{ball_number} {objects}')    
     return ball_list
 
 class Bot(commands.Bot):
@@ -48,7 +59,7 @@ class Bot(commands.Bot):
         # prefix can be a callable, which returns a list of strings or a string...
         # initial_channels can also be a callable which returns a list of strings...
         self.__exclusions = [i for i in dir(self)]
-        super().__init__(token=creds['access_token'], prefix='?', initial_channels=['askmartyn'])
+        super().__init__(token=creds['access_token'], prefix='*', initial_channels=['askmartyn'])
 
     async def event_ready(self):
         # Notify us when everything is ready!
@@ -90,7 +101,7 @@ class Bot(commands.Bot):
     @commands.command()
     async def eelee(self, ctx: commands.Context):
         ball_number = random.randint(0, 69)
-        ball_list = divide_balls(ball_number, ball_string='askmar1Eelee ')
+        ball_list = divide_balls(ball_number, ball_string='askmar1Eelee ', objects='eelees')
         for balls in ball_list:
             await ctx.send(f'{balls}')    
     
@@ -109,6 +120,10 @@ class Bot(commands.Bot):
         your_choices = random.choice(['you','yew', 'your', 'ur', 'you\'re', 'you are', 'u are', 'thou art' ])
         nerd_choices = random.choice(['nerd','newt', 'nord', 'nearrrrd','NERD!!', 'nooooooord', 'naaaard'])
         await ctx.send(f'{your_choices} a {nerd_choices}')
+    
+    @commands.command()
+    async def _(self, ctx: commands.Context):
+        await ctx.send('...coming soon...')
 
 
 def main():
