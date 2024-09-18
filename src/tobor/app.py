@@ -19,8 +19,10 @@ if os.environ.get('TOBOR_ACCESS_TOKEN') is not None:
     creds = {
             'access_token': os.environ.get('TOBOR_ACCESS_TOKEN'),
              'refresh_token': os.environ.get('TOBOR_REFRESH_TOKEN'),
-             'client_id': os.environ.get('TOBOR_CLIENT_ID')
-             }
+             'client_id': os.environ.get('TOBOR_CLIENT_ID'),
+             'user_token': os.environ.get('TOBOR_USER_TOKEN'),
+             'mod_user_channel_id': os.environ.get('MOD_USER_CHANNEL_ID'),
+             'my_channel_id': os.environ.get('TOBOR_MY_CHANNEL_ID'),            }
 else:    
     print('loading credentials from file')
 
