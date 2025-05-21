@@ -61,7 +61,7 @@ class Bot(commands.Bot):
         # prefix can be a callable, which returns a list of strings or a string...
         # initial_channels can also be a callable which returns a list of strings...
         self.__exclusions = [i for i in dir(self)]
-        super().__init__(token=creds['access_token'], prefix='*', initial_channels=['askmartyn'])
+        super().__init__(token=creds['access_token'], prefix='!', initial_channels=['askmartyn'])
 
     async def event_ready(self):
         # Notify us when everything is ready!
@@ -87,7 +87,7 @@ class Bot(commands.Bot):
             await ctx.send(f'{warning}')
 
     @commands.command()
-    async def roll_dice(self, ctx: commands.Context):
+    async def dice(self, ctx: commands.Context):
         # Simulate a dice roll, a random number between 1 and 6
         await ctx.send(f'You rolled a {random.randint(1, 6)}')    
 
