@@ -76,7 +76,7 @@ setup(
         'console_scripts': [
             meta_dict['name'] + ' = tobor.app:main',
             'pubsub = tobor.pubsub:main'
-            ],
+        ],
     },
 
     # Other configurations

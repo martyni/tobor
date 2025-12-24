@@ -1,5 +1,5 @@
 '''
-   Default test for Boilerplate App 
+   Default test for Boilerplate App
 '''
 
 from tobor.app import print_response, divide_balls
@@ -9,8 +9,9 @@ def test_print_response():
     '''
     Test of main function for default app
     '''
-    
+
     assert print_response("balls") is str, f'incorrect type returned'
+
 
 def test_divide_balls():
     '''

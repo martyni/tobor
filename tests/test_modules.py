@@ -18,7 +18,6 @@ def __find_dir(start_dir, directory):
         return __find_dir('./{start_dir}', directory)
 
 
-
 SRC = __find_dir('.', 'src')
 TESTS_DIR = 'tests'
 MODULES = listdir()
@@ -40,18 +39,18 @@ def test_module_imports():
             submod = submod.split('.py')[0]
             exec(f'import {mod}.{submod}')
             SUBMODULES.append(f'{mod}_{submod}')
-            assert exec(f'{mod}.{submod}') is not False, f'Could not initialize {mod}.{submod}'
+            assert exec(
+                f'{mod}.{submod}') is not False, f'Could not initialize {mod}.{submod}'
 
 
 def test_coverage():
     '''
     Check each coverage
     '''
-    __find_dir('.', TESTS_DIR)
-    tests = set(listdir())
+    tests = set(listdir("/home/martyni/repos/tobor/tests/"))
     for submod in SUBMODULES:
         print(submod)
-        assert f'{submod}_test.py' in tests
+        assert f'test_{submod}.py' in tests
 
 
 if __name__ == '__main__':
