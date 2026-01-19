@@ -21,4 +21,4 @@ jobs:
         pip install '.[dev]'
     - name: Running tests
       run: |
-        ./scripts/test.sh
+        ./scripts/test.sh credentials

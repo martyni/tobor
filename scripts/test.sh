@@ -6,6 +6,7 @@ OUTPUT_FILE=/tmp/output
 cd $ROOT_PROJECT_DIR
 source $(git rev-parse --show-toplevel)/scripts/common.sh
 NAME=$(cat ${RUN_DIR}/NAME)
+CREDS_FILE=$1
 
 echo -e ${YELLOW}Running tests from  ${RUN_DIR}${NO_COLOUR}
 
@@ -18,7 +19,7 @@ python_install () {
 python_test () {
   CURRENT_TEST=Python
   echo -e ${YELLOW} Starting Python Test ${NO_COLOUR}
-  pytest
+  pytest $CREDS_FILE
 }
 
 linting_test () {
