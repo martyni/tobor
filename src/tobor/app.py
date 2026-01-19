@@ -5,6 +5,7 @@ import random
 from twitchio.ext import commands
 import os
 from yaml import load
+from tobor.home_ass import HomeAss
 try:
     from yaml import CLoader as Loader
 except ImportError:
@@ -23,6 +24,8 @@ if os.environ.get('TOBOR_ACCESS_TOKEN') is not None:
         'TOBOR_USER_TOKEN': os.environ.get('TOBOR_USER_TOKEN'),
         'MOD_USER_CHANNEL_ID': os.environ.get('MOD_USER_CHANNEL_ID'),
         'MY_CHANNEL_ID': os.environ.get('MY_CHANNEL_ID'),
+        'BALLS_FILE': os.environ.get('BALLS_FILE'),
+        'BALLS_HOST': os.environ.get('BALLS_HOST'),
     }
 else:
     print('loading credentials from file')
@@ -82,6 +85,8 @@ class Bot(commands.Bot):
     @commands.command()
     async def balls(self, ctx: commands.Context):
         ball_number = random.randint(0, 69)
+        ha = HomeAss(creds['BALLS_HOST'],creds['BALLS_FILE'])
+        ha.put_balls(ball_number)
         ball_list = divide_balls(ball_number)
         for balls in ball_list:
             await ctx.send(f'{balls}')
