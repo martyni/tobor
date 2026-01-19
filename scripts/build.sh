@@ -3,6 +3,7 @@ source $(git rev-parse --show-toplevel)/scripts/common.sh
 NAME=$(cat ${RUN_DIR}/NAME)
 VERSION=$(cat ${RUN_DIR}/VERSION)
 DOCKER_REPO=$(cat ${RUN_DIR}/DOCKER_REPO)
+DOCKER_FLAGS=$(cat ${RUN_DIR}/DOCKER_FLAGS)
 BUILD_EXIT_FILE=/tmp/build_exit_code
 BUILD_OUTPUT=/tmp/build_output
 echo "old ${VERSION}"
@@ -20,6 +21,6 @@ else
    unbuffer docker build -t  $DOCKER_REPO/$NAME:$VERSION . 2>&1 | tee $BUILD_OUTPUT && awk -F 'exit code: ' '/exit code/{print $2}' $BUILD_OUTPUT > $BUILD_EXIT_FILE || exit 1
 fi
 
-echo docker run -it --env-file /home/app/env -v ~/.ssh:/root/.ssh   $DOCKER_REPO/$NAME:$VERSION
+echo docker run ${DOCKER_FLAGS} --env-file /home/app/env -v ~/.ssh:/root/.ssh   $DOCKER_REPO/$NAME:$VERSION
 echo exiting $(cat ${BUILD_EXIT_FILE})
 exit $(cat $BUILD_EXIT_FILE)
