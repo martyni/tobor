@@ -18,15 +18,12 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install '.[dev]'
-      with:
-        env:
-          MOD_USER_CHANNEL_ID  :  ${{ secret.MOD_USER_CHANNEL_ID }} 
-          MY_CHANNEL_ID        :  ${{ secret.MY_CHANNEL_ID      }}
-          TOBOR_ACCESS_TOKEN   :  ${{ secret.TOBOR_ACCESS_TOKEN }}
-          TOBOR_CLIENT_ID      :  ${{ secret.TOBOR_CLIENT_ID    }}
-          TOBOR_REFRESH_TOKEN  :  ${{ secret.TOBOR_REFRESH_TOKEN }}
-          TOBOR_USER_TOKEN     :  ${{ secret.TOBOR_USER_TOKEN   }}
-
     - name: Running tests
-      run: |
-        ./scripts/test.sh credentials
+      run: ./scripts/test.sh
+      env:
+          MOD_USER_CHANNEL_ID  :  ${{ secrets.MOD_USER_CHANNEL_ID }} 
+          MY_CHANNEL_ID        :  ${{ secrets.MY_CHANNEL_ID      }}
+          TOBOR_ACCESS_TOKEN   :  ${{ secrets.TOBOR_ACCESS_TOKEN }}
+          TOBOR_CLIENT_ID      :  ${{ secrets.TOBOR_CLIENT_ID    }}
+          TOBOR_REFRESH_TOKEN  :  ${{ secrets.TOBOR_REFRESH_TOKEN }}
+          TOBOR_USER_TOKEN     :  ${{ secrets.TOBOR_USER_TOKEN   }}
