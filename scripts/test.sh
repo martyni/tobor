@@ -6,7 +6,6 @@ OUTPUT_FILE=/tmp/output
 cd $ROOT_PROJECT_DIR
 source $(git rev-parse --show-toplevel)/scripts/common.sh
 NAME=$(cat ${RUN_DIR}/NAME)
-CREDS_FILE=$1
 
 echo $CREDENTIALS_FILE >$CREDS_FILE 
 
@@ -21,7 +20,7 @@ python_install () {
 python_test () {
   CURRENT_TEST=Python
   echo -e ${YELLOW} Starting Python Test ${NO_COLOUR}
-  pytest $CREDS_FILE
+  pytest
 }
 
 linting_test () {
