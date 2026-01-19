@@ -4,9 +4,9 @@ DOCKER_FLAGS=$(cat ${RUN_DIR}/DOCKER_FLAGS)
 DOCKER_REPO=$(cat ${RUN_DIR}/DOCKER_REPO)
 NAME=$(cat ${RUN_DIR}/NAME)
 VERSION=$(cat ${RUN_DIR}/VERSION)
-if [ -f /home/app/env ]; then; 
+if [ -f /home/app/env ]; then 
     export TEST_CONTAINER=$(docker run ${DOCKER_FLAGS} --env-file /home/app/env -v ~/.ssh:/home/app/.ssh ${DOCKER_REPO}/${NAME}:${VERSION})
-else;
+else
     cat <<\EOT >env
 MOD_USER_CHANNEL_ID=${MOD_USER_CHANNEL_ID}
 MY_CHANNEL_ID=${MY_CHANNEL_ID}
@@ -16,7 +16,7 @@ TOBOR_REFRESH_TOKEN=${TOBOR_REFRESH_TOKEN}
 TOBOR_USER_TOKEN=${TOBOR_USER_TOKEN}
 EOT
     export TEST_CONTAINER=$(docker run ${DOCKER_FLAGS} --env-file env  ${DOCKER_REPO}/${NAME}:${VERSION})
-fi;
+fi
 echo ${TEST_CONTAINER} >/tmp/${NAME}
 
 for i in {1..10};
