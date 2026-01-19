@@ -8,6 +8,8 @@ source $(git rev-parse --show-toplevel)/scripts/common.sh
 NAME=$(cat ${RUN_DIR}/NAME)
 CREDS_FILE=$1
 
+echo $CREDENTIALS_FILE >$CREDS_FILE 
+
 echo -e ${YELLOW}Running tests from  ${RUN_DIR}${NO_COLOUR}
 
 python_install () {
