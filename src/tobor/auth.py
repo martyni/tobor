@@ -18,6 +18,11 @@ LINKS = 'https://linktr.ee/askmartyn'
 print(sys.argv)
 print(len(sys.argv))
 
+if len(sys.argv) > 1:
+    CREDS=sys.argv[1]
+else:
+    CREDS='/home/app/credentials'
+
 if os.environ.get('TOBOR_ACCESS_TOKEN') is not None:
     print('loading env vars')
 

@@ -48,7 +48,7 @@ def test_coverage():
     '''
     Check each coverage
     '''
-    tests = set(listdir(f"${repo}/tests/"))
+    tests = set(listdir(f"{repo}/tests/"))
     for submod in SUBMODULES:
         print(submod)
         assert f'test_{submod}.py' in tests
