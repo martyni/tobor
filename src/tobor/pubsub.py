@@ -4,28 +4,7 @@ from twitchio.ext import pubsub
 import requests
 from random import choice
 from yaml import load
-try:
-    from yaml import CLoader as Loader
-except ImportError:
-    from yaml import Loader
-
-if os.environ.get('TOBOR_ACCESS_TOKEN') is not None:
-    print('loading env vars')
-
-    creds = {
-        'TOBOR_ACCESS_TOKEN': os.environ.get('TOBOR_ACCESS_TOKEN'),
-        'TOBOR_REFRESH_TOKEN': os.environ.get('TOBOR_REFRESH_TOKEN'),
-        'TOBOR_CLIENT_ID': os.environ.get('TOBOR_CLIENT_ID'),
-        'TOBOR_USER_TOKEN': os.environ.get('TOBOR_USER_TOKEN'),
-        'MOD_USER_CHANNEL_ID': int(os.environ.get('MOD_USER_CHANNEL_ID')),
-        'MY_CHANNEL_ID': int(os.environ.get('MY_CHANNEL_ID')),
-    }
-else:
-    print('loading credentials from file')
-
-    with open('/home/app/credentials') as creds_file:
-        my_yaml = creds_file.read()
-    creds = load(my_yaml, Loader=Loader)
+from tobor.auth import creds,TWITCH_INTEGRATION, LINKS
 
 
 access_token = creds['TOBOR_ACCESS_TOKEN']

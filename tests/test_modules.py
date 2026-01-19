@@ -2,8 +2,9 @@
    Testing module imports
 '''
 # pylint: disable=W0122
-from os import listdir, chdir, walk
+from os import listdir, chdir, walk, getcwd
 
+repo = getcwd()
 
 def __find_dir(start_dir, directory):
     '''
@@ -47,7 +48,7 @@ def test_coverage():
     '''
     Check each coverage
     '''
-    tests = set(listdir("/home/martyni/repos/tobor/tests/"))
+    tests = set(listdir(f"{repo}/tests/"))
     for submod in SUBMODULES:
         print(submod)
         assert f'test_{submod}.py' in tests

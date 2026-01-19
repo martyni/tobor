@@ -5,31 +5,8 @@ import random
 from twitchio.ext import commands
 import os
 from yaml import load
-try:
-    from yaml import CLoader as Loader
-except ImportError:
-    from yaml import Loader
-
-TWITCH_INTEGRATION = 'https://support.discord.com/hc/en-us/articles/212112068-Twitch-Integration-FAQ#h_01GBQS1H1GHA13S6S3NX3114QC'
-LINKS = 'https://linktr.ee/askmartyn'
-
-if os.environ.get('TOBOR_ACCESS_TOKEN') is not None:
-    print('loading env vars')
-
-    creds = {
-        'TOBOR_ACCESS_TOKEN': os.environ.get('TOBOR_ACCESS_TOKEN'),
-        'TOBOR_REFRESH_TOKEN': os.environ.get('TOBOR_REFRESH_TOKEN'),
-        'TOBOR_CLIENT_ID': os.environ.get('TOBOR_CLIENT_ID'),
-        'TOBOR_USER_TOKEN': os.environ.get('TOBOR_USER_TOKEN'),
-        'MOD_USER_CHANNEL_ID': os.environ.get('MOD_USER_CHANNEL_ID'),
-        'MY_CHANNEL_ID': os.environ.get('MY_CHANNEL_ID'),
-    }
-else:
-    print('loading credentials from file')
-
-    with open('/home/app/credentials') as creds_file:
-        my_yaml = creds_file.read()
-    creds = load(my_yaml, Loader=Loader)
+from tobor.home_ass import HomeAss
+from tobor.auth import creds,TWITCH_INTEGRATION, LINKS
 
 
 def print_response(ctx):
@@ -82,6 +59,8 @@ class Bot(commands.Bot):
     @commands.command()
     async def balls(self, ctx: commands.Context):
         ball_number = random.randint(0, 69)
+        ha = HomeAss(creds['BALLS_HOST'],creds['BALLS_FILE'])
+        ha.put_balls(ball_number)
         ball_list = divide_balls(ball_number)
         for balls in ball_list:
             await ctx.send(f'{balls}')

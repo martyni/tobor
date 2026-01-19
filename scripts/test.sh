@@ -1,10 +1,12 @@
-#!/bin/bash -x
+#!/bin/bash 
 ORIGINAL_DIR=$(pwd)
 ROOT_PROJECT_DIR=$(git rev-parse --show-toplevel)
 OUTPUT_FILE=/tmp/output
 
 cd $ROOT_PROJECT_DIR
 source $(git rev-parse --show-toplevel)/scripts/common.sh
+NAME=$(cat ${RUN_DIR}/NAME)
+
 
 echo -e ${YELLOW}Running tests from  ${RUN_DIR}${NO_COLOUR}
 
@@ -32,13 +34,6 @@ build_test () {
   ${RUN_DIR}/build.sh
 }
 
-run_test () {
-  CURRENT_TEST=Run
-  echo -e ${YELLOW} Starting Run Test ${NO_COLOUR}
-  ${RUN_DIR}/run.sh &> $OUTPUT_FILE 
-  (grep "User id is" ${OUTPUT_FILE} && echo -e ${GREEN}Success${NO_COLOUR=} ) || (echo -e ${RED}Fail${NO_COLOUR} && exit 1)
-}
-
 all_tests_pass () {
   echo -e ${GREEN} All tests passed ${NO_COLOUR}
   cd $ORIGINAL_DIR
@@ -51,4 +46,13 @@ test_failed () {
   exit 1
 }
 
-python_install && python_test  && build_test && run_test  && all_tests_pass || test_failed
+run_test () {
+  CURRENT_TEST=Run
+  echo -e ${YELLOW} Starting Run Test ${NO_COLOUR}
+  ${RUN_DIR}/run.sh  
+  export TEST_CONTAINER=$(cat /tmp/${NAME})
+  CMD=$(echo "docker logs ${TEST_CONTAINER}")
+  $CMD | grep "User id is" && all_tests_pass || test_failed 
+}
+
+python_install && python_test  && build_test && run_test  
