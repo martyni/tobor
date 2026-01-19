@@ -7,7 +7,7 @@ VERSION=$(cat ${RUN_DIR}/VERSION)
 if [ -f /home/app/env ]; then 
     export TEST_CONTAINER=$(docker run ${DOCKER_FLAGS} --env-file /home/app/env -v ~/.ssh:/home/app/.ssh ${DOCKER_REPO}/${NAME}:${VERSION})
 else
-    cat <<\EOT >env
+    cat <<EOT >env
 MOD_USER_CHANNEL_ID=${MOD_USER_CHANNEL_ID}
 MY_CHANNEL_ID=${MY_CHANNEL_ID}
 TOBOR_ACCESS_TOKEN=${TOBOR_ACCESS_TOKEN}
