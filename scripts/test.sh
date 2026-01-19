@@ -7,7 +7,6 @@ cd $ROOT_PROJECT_DIR
 source $(git rev-parse --show-toplevel)/scripts/common.sh
 NAME=$(cat ${RUN_DIR}/NAME)
 
-echo $CREDENTIALS_FILE >$CREDS_FILE 
 
 echo -e ${YELLOW}Running tests from  ${RUN_DIR}${NO_COLOUR}
 
