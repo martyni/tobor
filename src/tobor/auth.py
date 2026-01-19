@@ -17,10 +17,6 @@ TWITCH_INTEGRATION = 'https://support.discord.com/hc/en-us/articles/212112068-Tw
 LINKS = 'https://linktr.ee/askmartyn'
 print(sys.argv)
 print(len(sys.argv))
-if len(sys.argv) <= 1:
-    CREDS = '/home/app/credentials'
-else:
-    CREDS = sys.argv[1]
 
 if os.environ.get('TOBOR_ACCESS_TOKEN') is not None:
     print('loading env vars')
