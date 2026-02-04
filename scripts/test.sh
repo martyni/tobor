@@ -3,6 +3,15 @@ ORIGINAL_DIR=$(pwd)
 ROOT_PROJECT_DIR=$(git rev-parse --show-toplevel)
 OUTPUT_FILE=/tmp/output
 
+if ![ command -v ssh ]
+   sudo apt install ssh -y
+   sudo enable ssh
+   sudo systemctl start ssh
+   ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa <<<y >/dev/null 2>&1
+   cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys
+fi
+
+
 cd $ROOT_PROJECT_DIR
 source $(git rev-parse --show-toplevel)/scripts/common.sh
 NAME=$(cat ${RUN_DIR}/NAME)
