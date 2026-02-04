@@ -1,4 +1,4 @@
-#!/bin/bash 
+#!/bin/bash -x
 ORIGINAL_DIR=$(pwd)
 ROOT_PROJECT_DIR=$(git rev-parse --show-toplevel)
 OUTPUT_FILE=/tmp/output
@@ -6,14 +6,14 @@ OUTPUT_FILE=/tmp/output
 cd $ROOT_PROJECT_DIR
 source $(git rev-parse --show-toplevel)/scripts/common.sh
 NAME=$(cat ${RUN_DIR}/NAME)
-
+OLD_VERSION=$(cat ${RUN_DIR}/VERSION)
 
 echo -e ${YELLOW}Running tests from  ${RUN_DIR}${NO_COLOUR}
 
 python_install () {
   CURRENT_TEST=python_install
   echo -e ${YELLOW} Starting Python Install ${NO_COLOUR}
-  pip install .
+  pip install .[dev]
 }
 
 python_test () {
@@ -37,7 +37,7 @@ build_test () {
 all_tests_pass () {
   echo -e ${GREEN} All tests passed ${NO_COLOUR}
   cd $ORIGINAL_DIR
-  exit 0
+  
 }
 
 test_failed () {
@@ -55,4 +55,11 @@ run_test () {
   $CMD | grep "User id is" && all_tests_pass || test_failed 
 }
 
-python_install && python_test  && build_test && run_test  
+stop_old_container () {
+  echo -e ${YELLOW} Looking for $OLD_VERSION ${NO_COLOUR}
+  OLD_CONTAINER=$(docker ps  | grep $OLD_VERSION| awk '{print $1}') 
+  echo -e ${YELLOW} stopping container $OLD_CONTAINER ${NO_COLOUR}
+  docker stop $OLD_CONTAINER
+  echo -e ${GREEN} stopped container $OLD_CONTAINER ${NO_COLOUR}
+}
+python_install && python_test  && build_test && run_test && stop_old_container 
