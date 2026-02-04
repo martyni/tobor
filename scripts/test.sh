@@ -4,9 +4,9 @@ ROOT_PROJECT_DIR=$(git rev-parse --show-toplevel)
 OUTPUT_FILE=/tmp/output
 
 if ![ command -v ssh ]
-   sudo apt install ssh -y
+   sudo apt update -y && sudo apt install sshd -y
    sudo enable ssh
-   sudo systemctl start ssh
+   sudo systemctl start sshd
    ssh-keygen -q -t rsa -N '' -f ~/.ssh/id_rsa <<<y >/dev/null 2>&1
    cp ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys
 fi
