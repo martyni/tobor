@@ -2,10 +2,31 @@
    Default test for Boilerplate App
 '''
 
-from  tobor.home_ass import HomeAss 
+import json
+import pytest
+from unittest.mock import patch
+from tobor.home_ass import HomeAss
 
 from random import randint
 HA = HomeAss('localhost', 'file')
+
+_mock_storage = {}
+
+
+def _mock_logon_run(self, cmd):
+    """Simulate SSH file operations using in-memory storage."""
+    if cmd[0] == 'jq':
+        return json.dumps(_mock_storage.get(self.ball_file, {}))
+    else:
+        _mock_storage[self.ball_file] = json.loads(cmd[1])
+        return ''
+
+
+@pytest.fixture(autouse=True)
+def mock_ssh():
+    _mock_storage.clear()
+    with patch.object(HomeAss, 'logon_run', _mock_logon_run):
+        yield
 
 
 def random_string(length=6):
