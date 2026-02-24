@@ -3,7 +3,7 @@ ORIGINAL_DIR=$(pwd)
 ROOT_PROJECT_DIR=$(git rev-parse --show-toplevel)
 OUTPUT_FILE=/tmp/output
 
-if ![ command -v ssh ]
+if ![ command -v ssh ]; then
    sudo apt update -y && sudo apt install sshd -y
    sudo enable ssh
    sudo systemctl start sshd
