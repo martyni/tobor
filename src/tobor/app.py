@@ -5,6 +5,7 @@ import random
 import pydoc
 import inspect
 from twitchio.ext import commands
+from twitchio import eventsub
 import os
 from yaml import load
 from tobor.home_ass import HomeAss
@@ -88,9 +89,19 @@ class Bot(commands.Bot):
         self.unwanted_methods = set(dir(notBot()))
         self.ha = HomeAss(self.creds['BALLS_HOST'],self.creds['BALLS_FILE'])
         super().__init__(
-            token=self.creds['TOBOR_ACCESS_TOKEN'],
-            prefix='!',
-            initial_channels=['askmartyn'])
+            client_id=self.creds['TOBOR_CLIENT_ID'],
+            client_secret=self.creds['TOBOR_CLIENT_SECRET'],
+            bot_id=self.creds['TOBOR_BOT_ID'],
+            prefix='!')
+
+    async def load_tokens(self, path=None):
+        await self.add_token(self.creds['TOBOR_ACCESS_TOKEN'], self.creds['TOBOR_REFRESH_TOKEN'])
+
+    async def setup_hook(self):
+        payload = eventsub.ChatMessageSubscription(
+            broadcaster_user_id=self.creds['MY_CHANNEL_ID'],
+            user_id=self.bot_id)
+        await self.subscribe_websocket(payload=payload)
 
     def get_method_attr(self, attr):
         return getattr(self, attr)
@@ -98,8 +109,8 @@ class Bot(commands.Bot):
     async def event_ready(self):
         # Notify us when everything is ready!
         # We are logged in and ready to chat and use commands...
-        print(f'Logged in as | {self.nick}')
-        print(f'User id is | {self.user_id}')
+        print(f'Logged in as | {self.user.name}')
+        print(f'User id is | {self.user.id}')
 
     @commands.command()
     async def balls(self, ctx: commands.Context):
