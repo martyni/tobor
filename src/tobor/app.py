@@ -10,6 +10,7 @@ from yaml import load
 from tobor.home_ass import HomeAss
 from tobor.colours import colours
 from tobor.auth import creds,TWITCH_INTEGRATION, LINKS
+import requests as req
 
 
 def print_response(ctx):
@@ -38,6 +39,19 @@ def divide_balls(
         ball_list.append(combined_ball_string)
     ball_list.append(f'{ball_number} {objects}')
     return ball_list
+
+def log_events(message, user, data_url="https://twitch.tv/askmartyn", platform="twitch", url="https://eventlogger.askmartyn.com:6969/event"):
+    data={
+            "message": message,
+            "user": user,
+            "url": data_url,
+            "platform": platform
+            }
+    print(f"{url}, data: {data}")
+    req.post(  json=data, url=url )
+
+    
+
 
 
 class notBot(commands.Bot):
@@ -96,7 +110,8 @@ class Bot(commands.Bot):
         for balls in ball_list:
             await ctx.send(f'{balls}')
         if ball_number == 69:
-            await ctx.send('nice')
+            log_events("Congratulate the Ball Master!", f"{ctx.author.name}")
+            await ctx.send(f'nice work {ctx.author.name}')
 
     @commands.command()
     async def cw(self, ctx: commands.Context):
@@ -121,9 +136,9 @@ class Bot(commands.Bot):
         roll = random.randint(1, 20)
         self.ha.put_keys(d20=roll)
         if roll == 20:
-           await ctx.send(f'YOU ROLLED A NAT {roll}!!!!')
+           await ctx.send(f'{ctx.author.name} ROLLED A NAT {roll}!!!!')
         else:
-           await ctx.send(f'You rolled a {roll}')
+           await ctx.send(f'{ctx.author.name} rolled a {roll}')
 
     @commands.command()
     async def coinflip(self, ctx: commands.Context):
@@ -162,11 +177,13 @@ class Bot(commands.Bot):
         lookup_colour = raw_colour.lower().replace(" ","")
         if lookup_colour in  self.colours_list:
           self.ha.put_keys(raw_colour=lookup_colour)
+          log_events(lookup_colour, f"{ctx.author.name}")
           await ctx.send(f'Setting light to {raw_colour}')
         else: 
           creative_colour = self.colours_list.pop()
           remaining_colours = len(self.colours_list)
           self.ha.put_keys(raw_colour=lookup_colour)
+          log_events(lookup_colour, f"{ctx.author.name}")
           await ctx.send(f'{raw_colour} is not a creative colour, setting to {creative_colour}. {remaining_colours} colours remaining.')
 
 
@@ -187,13 +204,15 @@ class Bot(commands.Bot):
         for balls in ball_list:
             await ctx.send(f'{balls}')
         if ball_number == 69:
+            log_events("They really care", f"{ctx.author.name}")
             await ctx.send('aw, thats nice')
 
     @commands.command()
     async def fluid(self, ctx: commands.Context):
         self.helpful_dict['fluid']
         fluid_choice = random.choice(
-            ['wet', 'moisten', 'fluid', 'slorp', 'wazz', 'spit', 'squirt'])
+            ['wet', 'moisten', 'fluid', 'slorp', 'wazz', 'drool', 'squirt'])
+        log_events(f"{fluid_choice} yourself", f"{ctx.author.name}")
         await ctx.send(f'{fluid_choice} yourself')
 
     @commands.command()
@@ -210,7 +229,7 @@ class Bot(commands.Bot):
             ['you', 'yew', 'your', 'ur', 'you\'re', 'you are', 'u are', 'thou art'])
         nerd_choices = random.choice(
             ['nerd', 'newt', 'nord', 'nearrrrd', 'NERD!!', 'nooooooord', 'naaaard'])
-        await ctx.send(f'{your_choices} a {nerd_choices}')
+        await ctx.send(f'{ctx.author.name} thinks {your_choices} a {nerd_choices}')
 
     @commands.command()
     async def help(self, ctx: commands.Context, *args):
@@ -240,5 +259,4 @@ class Bot(commands.Bot):
 def main():
     bot = Bot()
     bot.run()
-
 
