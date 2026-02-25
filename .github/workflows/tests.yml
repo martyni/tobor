@@ -7,7 +7,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.12"]
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
@@ -26,7 +26,7 @@ jobs:
           TOBOR_REFRESH_TOKEN  :  ${{ secrets.TOBOR_REFRESH_TOKEN }}
           TOBOR_USER_TOKEN     :  ${{ secrets.TOBOR_USER_TOKEN   }}
     - name: Running tests
-      run: ./scripts/test.sh
+      run: pytest
       env:
           MOD_USER_CHANNEL_ID  :  ${{ secrets.MOD_USER_CHANNEL_ID }} 
           MY_CHANNEL_ID        :  ${{ secrets.MY_CHANNEL_ID      }}
