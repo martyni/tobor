@@ -30,6 +30,8 @@ if os.environ.get('TOBOR_ACCESS_TOKEN') is not None:
         'TOBOR_ACCESS_TOKEN': os.environ.get('TOBOR_ACCESS_TOKEN'),
         'TOBOR_REFRESH_TOKEN': os.environ.get('TOBOR_REFRESH_TOKEN'),
         'TOBOR_CLIENT_ID': os.environ.get('TOBOR_CLIENT_ID'),
+        'TOBOR_CLIENT_SECRET': os.environ.get('TOBOR_CLIENT_SECRET'),
+        'TOBOR_BOT_ID': os.environ.get('TOBOR_BOT_ID'),
         'TOBOR_USER_TOKEN': os.environ.get('TOBOR_USER_TOKEN'),
         'MOD_USER_CHANNEL_ID': os.environ.get('MOD_USER_CHANNEL_ID'),
         'MY_CHANNEL_ID': os.environ.get('MY_CHANNEL_ID'),

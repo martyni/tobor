@@ -1,18 +1,13 @@
-import os
 import twitchio
-from twitchio.ext import pubsub
+from twitchio import eventsub
 import requests
 from random import choice
-from yaml import load
-from tobor.auth import creds,TWITCH_INTEGRATION, LINKS
+from tobor.auth import creds, TWITCH_INTEGRATION, LINKS
 
 
 access_token = creds['TOBOR_ACCESS_TOKEN']
-user_token = creds['TOBOR_USER_TOKEN']
+refresh_token = creds['TOBOR_REFRESH_TOKEN']
 my_channel_id = creds['MY_CHANNEL_ID']
-mod_user_channel_id = creds['MOD_USER_CHANNEL_ID']
-client = twitchio.Client(token=access_token)
-client.pubsub = pubsub.PubSubPool(client)
 
 
 def strip_phrase(phrase, message):
@@ -31,26 +26,32 @@ def message_ticker(message, ticker_host='http://ticker'):
     print('sent')
 
 
-@client.event()
-async def event_pubsub_bits(event: pubsub.PubSubBitsMessage):
-    print('bits message')
-    print(event.message.content)
-    message = strip_phrase(f'Cheer{event.bits_used}', event.message.content)
-    message = f'{event.user.name} sent {event.bits_used} {random_bit_word()}! {message}'
-    message_ticker(message)
+class BitsClient(twitchio.Client):
+
+    async def load_tokens(self, path=None):
+        await self.add_token(access_token, refresh_token)
+
+    async def setup_hook(self):
+        print(f'connecting to channel: {my_channel_id}')
+        payload = eventsub.ChannelBitsUseSubscription(broadcaster_user_id=my_channel_id)
+        await self.subscribe_websocket(payload=payload)
+
+    async def event_channel_bits_use(self, event: twitchio.ChannelBitsUse):
+        print('bits message')
+        print(event.text)
+        message = f'{event.user.name} sent {event.bits} {random_bit_word()}!'
+        if event.text:
+            message += f' {event.text}'
+        message_ticker(message)
 
 
-async def loop():
-    print(f'connecting to channel: {my_channel_id}')
-    topics = [
-        pubsub.bits(user_token)[my_channel_id],
-    ]
-    await client.pubsub.subscribe_topics(topics)
-    await client.start()
+client = BitsClient(
+    client_id=creds['TOBOR_CLIENT_ID'],
+    client_secret=creds['TOBOR_CLIENT_SECRET'])
 
 
 def main():
-    client.loop.run_until_complete(loop())
+    client.run()
 
 
 if __name__ == "__main__":
